@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Can be removed after react-scripts 4.0.2 is released and this project is update to it
+.eslintcache
+
 # dependencies
 /node_modules
 /.pnp
