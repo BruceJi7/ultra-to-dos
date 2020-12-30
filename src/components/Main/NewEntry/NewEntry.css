@@ -1,0 +1,9 @@
+.new-entry-block {
+    margin-bottom:20px;
+}
+
+.new-entry-label {
+    display:flex;
+    justify-content: space-between;
+    width:300px;
+}

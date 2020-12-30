@@ -1,0 +1,8 @@
+header {
+    display: flex;
+    align-items: center;
+    color:blueviolet;
+}
+header h1 {
+    text-align: center;
+}
