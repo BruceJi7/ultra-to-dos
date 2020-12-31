@@ -44,23 +44,16 @@ export const TodoList = () => {
 
     const [loadedTodos] = useCollectionData(query, {idField:'id'})
 
-    
-
-    const handleChecked = async(id:any) => {
-
-        // First we await the Promise that get() returns to get the actual query snapshot and be done with the Promise
-        const querySnapshot = await todosRef.where('id', '==', id.toString()).get()
-        // Now we can use the query snapshot as normal, and TypeScript recognizes it as a
-        // QuerySnapshot<DocumentData> object. It also recognizes doc as QueryDocumentSnapshot<DocumentData>
-        querySnapshot.forEach(function(doc){
-            console.log(doc.id)
-        })
-
-        // If you have the document's actual ID, you may want to do this instead of a query:
-        // const doc = await todosRef.doc(id.toString()).get()
-        // console.log(doc.id)
-        // However, if this "id" field you're using isn't the document's id,
-        // you'll need to use the query method you already did
+    const handleChecked = async(id:string) => {
+        // You're not storing the document's ID as a field inside the document,
+        // so querying for id == X will not work, since id doesn't exist as a field.
+        // However, we can fetch the document by its id, which is easier anyway.
+        const doc = await todosRef.doc(id).get()
+        console.log(`found doc: ${JSON.stringify(doc.data())}`)
+        // The only reason id exists in your loadedTodos objects is because
+        // by specifying idField as id, useCollectionData is adding the document's
+        // id as an id property of the returned objects.
+        // See useCollectionData in https://github.com/csfrequency/react-firebase-hooks/tree/5182e86c8711e1d6da73a70134a94b665137b545/firestore#usecollectiondata
     }
 
 
@@ -74,7 +67,8 @@ export const TodoList = () => {
             {loadedTodos && loadedTodos?.map((todo:any) => {
                 return (
                 <TodoUnit 
-                    key={todo.id}  
+                    key={todo.id}
+                    id={todo.id}
                     title={todo.title} 
                     description={todo.description}
                     dueDate={todo.dueDate.toDate().toDateString()}
