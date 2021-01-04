@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 
-import { useAuthState } from 'react-firebase-hooks/auth'
+// import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { firestore, auth } from "../../../firebase/fireInstance"
 
@@ -22,7 +22,6 @@ export const TodoList = () => {
 
     const [showNewEntry, setShowNewEntry] = useState(false)
     const [deleteMode, setDeleteMode] = useState(false)
-    const [todos, setTodos] = useState([])
 
     // Because auth.currentUser is User | null (that is, either a User or null), you can't guarantee that uid exists.
     // By using optional chaining, we can access it: https://stackoverflow.com/a/28469563/795407
@@ -39,8 +38,12 @@ export const TodoList = () => {
     const [loadedTodos] = useCollectionData(query, {idField:'id'})
 
     // Alternatively, use a sorting function - this also doesn't work :S But this would be more flexible for later uses.
-    // const sortedTodos = loadedTodos?.sort((a, b) => {return a.dueDate > b.dueDate})
+    const sortedTodos = loadedTodos?.sort((a:any, b:any) => {
+        
+        const aDate = new Date(a.dueDate).getTime()
+        const bDate = new Date(b.dueDate).getTime()
 
+        return aDate - bDate})
 
     // Check off a task. Fetch existing completed state and update it.
     const handleChecked = async(id:string) => {
@@ -79,7 +82,7 @@ export const TodoList = () => {
         
         <div>
 
-            {loadedTodos && loadedTodos?.map((todo:any) => {
+            {sortedTodos && sortedTodos?.map((todo:any) => {
                 return (
                 <TodoUnit 
                     key={todo.id}
