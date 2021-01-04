@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import Header from './components/Head/Header/Header'
 import NavBar from './components/Head/NavBar/NavBar'
 import Main from './components/Main/Main'
-import Footer from './components/Footer/Footer'
+// import Footer from './components/Footer/Footer'
 
 import './App.css'
 

@@ -13,6 +13,10 @@ const NewEntry = () => {
     
     const todosRef = firestore.collection('todos')
 
+    // const todayDate = new Date()
+    // const todayDateString = `${todayDate.getFullYear()}-${todayDate.getMonth()+1}-${todayDate.getDate()}`
+    // value={todayDateString.toString()}
+
     const addToDo = async() => {
 
         const dueDate = Math.floor( (new Date(date)).getTime() / 1000)
@@ -53,7 +57,7 @@ const NewEntry = () => {
 
             <p className="new-entry-label">
                 <label  htmlFor="date">Due date:</label>
-                <input name="date" type="date" onChange={(e)=>setDate(e.target.value)} required/>
+                <input name="date" type="date" onChange={(e)=>setDate(e.target.value)}  required/>
             </p>
 
             <button onClick={()=> addToDo()}>Submit!</button>

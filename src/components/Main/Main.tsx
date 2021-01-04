@@ -2,7 +2,7 @@ import { Switch, Route } from 'react-router-dom'
 
 import NewEntry from './NewEntry/NewEntry'
 import {TodoList} from './TodoList/TodoList'
-import { SignIn, SignOut }  from './SignIn/SignIn'
+import { SignIn }  from './SignIn/SignIn'
 
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from "../../firebase/fireInstance"
