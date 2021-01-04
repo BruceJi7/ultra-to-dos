@@ -5,8 +5,6 @@ import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { firestore, auth } from "../../../firebase/fireInstance"
 
-import axios from "../../../axios/axiosInstance"
-
 import NewEntry from '../NewEntry/NewEntry'
 import { TodoUnit } from './TodoUnit/TodoUnit'
 
@@ -23,6 +21,7 @@ import "./TodoList.css"
 export const TodoList = () => {
 
     const [showNewEntry, setShowNewEntry] = useState(false)
+    const [deleteMode, setDeleteMode] = useState(false)
     const [todos, setTodos] = useState([])
 
     // Because auth.currentUser is User | null (that is, either a User or null), you can't guarantee that uid exists.
@@ -32,15 +31,9 @@ export const TodoList = () => {
     const showNewEntryClass = showNewEntry ? null : "optional-open"
 
 
-    useEffect(()=>{
-
-        axios.get("/")
-
-    },[])
-
-
     const todosRef = firestore.collection('todos')
-    const query = todosRef.orderBy('dueDate')
+    const query = todosRef.where('associatedUsers', 'array-contains', uid)
+    // const query = todosRef.orderBy('dueDate')
 
     const [loadedTodos] = useCollectionData(query, {idField:'id'})
 
@@ -61,6 +54,19 @@ export const TodoList = () => {
             doc.update({completed:!docData.completed})
         }
     }
+    
+    const handleDelete = async(id:string) => {
+        
+        const doc = todosRef.doc(id)
+        const docData = (await doc.get()).data()
+        
+        if (docData) {
+            console.log(`Task ${docData.title} was deleted.`)
+            doc.delete()
+        }
+
+
+    }
 
 
     return (
@@ -79,12 +85,15 @@ export const TodoList = () => {
                     description={todo.description}
                     dueDate={todo.dueDate.toDate().toDateString()}
                     completed={todo.completed}
-                    handleChecked={handleChecked} 
+                    deleteMode={deleteMode}
+                    handleChecked={handleChecked}
+                    handleDelete={handleDelete} 
                 />)
                 })
                 }
 
         </div>
+        <p className="delete-button" onClick={()=> setDeleteMode(!deleteMode)}>{deleteMode ? "Finished Removing" : "Toggle Remove" }</p>
         </>
     )
 }

@@ -10,15 +10,27 @@ interface Props {
     description:string,
     dueDate:string,
     completed:boolean,
-    handleChecked:(id:string) => void
+    deleteMode:boolean,
+    handleChecked:(id:string) => void,
+    handleDelete:(id:string) => void
 } 
 
 export const TodoUnit = (props: Props) => {
-    const {id, title, dueDate, description, completed} = props
+    const {id, title, dueDate, description, completed, deleteMode} = props
+
+    let check = <input className="todo-checkbox" type="checkbox" checked={completed} onChange={()=>props.handleChecked(id)} />
+
+    if (deleteMode === true) {
+        check = <i className="fas fa-minus-circle todo-delete-icon" onClick={()=>props.handleDelete(id)}/>
+    } 
+
+
     return (
         <div className="todo-unit">
-            <p>
-                <input className="todo-checkbox" type="checkbox" checked={completed} onChange={()=>props.handleChecked(id)} />
+            <p className="todo-unit-table">
+                <span>
+                    {check}                    
+                </span>
                 <span className="todo-title">{title}</span>
                 <span className="todo-date">{dueDate}</span>
             </p>

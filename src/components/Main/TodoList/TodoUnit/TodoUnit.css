@@ -2,6 +2,12 @@
     color:black;
     margin:10px;
 }
+
+.todo-unit-table {
+    display:grid;
+    grid-template-columns: 1fr 5fr 3fr;
+}
+
 .todo-title {
     font-size:1.1em;
     font-weight:600;
@@ -18,4 +24,10 @@
 .todo-description {
     margin-left:40px;
     padding-left:0px;
+}
+.todo-delete-icon {
+    margin-right:25px;
+    border-radius: 50%;
+    color:rgb(204, 30, 7);
+    background-color:white;
 }

@@ -22,6 +22,7 @@ const NewEntry = () => {
             title:title,
             description:description,
             uid:auth.currentUser?.uid,
+            associatedUsers:[auth.currentUser?.uid],
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             dueDate: dueTimestamp,
             completed:false
