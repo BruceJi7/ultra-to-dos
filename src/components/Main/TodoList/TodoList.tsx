@@ -48,12 +48,18 @@ export const TodoList = () => {
         // You're not storing the document's ID as a field inside the document,
         // so querying for id == X will not work, since id doesn't exist as a field.
         // However, we can fetch the document by its id, which is easier anyway.
-        const doc = await todosRef.doc(id).get()
-        console.log(`found doc: ${JSON.stringify(doc.data())}`)
+        const doc = todosRef.doc(id)
+        const docData = (await doc.get()).data()
+
+        // console.log(`found doc: ${JSON.stringify(doc.data())}`)
         // The only reason id exists in your loadedTodos objects is because
         // by specifying idField as id, useCollectionData is adding the document's
         // id as an id property of the returned objects.
         // See useCollectionData in https://github.com/csfrequency/react-firebase-hooks/tree/5182e86c8711e1d6da73a70134a94b665137b545/firestore#usecollectiondata
+        if (docData) {
+            console.log(`Task ${docData.title}: Completed is now ${!docData.completed}`)
+            doc.update({completed:!docData.completed})
+        }
     }
 
 
