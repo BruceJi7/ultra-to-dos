@@ -32,11 +32,17 @@ export const TodoList = () => {
 
 
     const todosRef = firestore.collection('todos')
-    const query = todosRef.where('associatedUsers', 'array-contains', uid)
+    const query = todosRef.where('associatedUsers', 'array-contains', uid) // I want to have orderBy here too but it doesn't work :S
+
     // const query = todosRef.orderBy('dueDate')
 
     const [loadedTodos] = useCollectionData(query, {idField:'id'})
 
+    // Alternatively, use a sorting function - this also doesn't work :S But this would be more flexible for later uses.
+    // const sortedTodos = loadedTodos?.sort((a, b) => {return a.dueDate > b.dueDate})
+
+
+    // Check off a task. Fetch existing completed state and update it.
     const handleChecked = async(id:string) => {
         // You're not storing the document's ID as a field inside the document,
         // so querying for id == X will not work, since id doesn't exist as a field.
@@ -55,17 +61,14 @@ export const TodoList = () => {
         }
     }
     
-    const handleDelete = async(id:string) => {
+    // Delete  a task. Use existing title value for logging.
+    const handleDelete = async(id:string, title:string) => {
         
         const doc = todosRef.doc(id)
-        const docData = (await doc.get()).data()
+    
+        console.log(`Task ${title} was deleted.`)
+        doc.delete()
         
-        if (docData) {
-            console.log(`Task ${docData.title} was deleted.`)
-            doc.delete()
-        }
-
-
     }
 
 
