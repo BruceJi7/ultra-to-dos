@@ -9,13 +9,12 @@ const NewEntry = () => {
 
     const [ title, setTitle ] = useState('')
     const [ description, setDescription ] = useState('')
-    const [ date, setDate ] = useState('')
+    const [ date, setDate ] = useState(new Date().toISOString().split('T')[0])
     
     const todosRef = firestore.collection('todos')
 
-    // const todayDate = new Date()
-    // const todayDateString = `${todayDate.getFullYear()}-${todayDate.getMonth()+1}-${todayDate.getDate()}`
-    // value={todayDateString.toString()}
+
+
 
     const addToDo = async() => {
 
@@ -57,7 +56,7 @@ const NewEntry = () => {
 
             <p className="new-entry-label">
                 <label  htmlFor="date">Due date:</label>
-                <input name="date" type="date" onChange={(e)=>setDate(e.target.value)}  required/>
+                <input name="date" type="date" onChange={(e)=> {console.log(e.target.value); setDate(e.target.value)}} value={date}  required/>
             </p>
 
             <button onClick={()=> addToDo()}>Submit!</button>
