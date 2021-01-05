@@ -1,0 +1,19 @@
+.connect-msg-block {
+
+    width:100%;
+    padding:20px;
+    text-align:center;
+
+    display: flex;
+    justify-content: space-between;
+    
+    border-radius: 10px;
+    border: 2px solid white;
+
+    background-color: aqua;
+
+}
+
+.connect-msg-close-span {
+    cursor: pointer;
+}
