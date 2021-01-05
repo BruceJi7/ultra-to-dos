@@ -60,7 +60,11 @@ export const TodoUnit = (props: Props) => {
                 <span className={titleStyle}>{title}</span>
                 <span className={dateStyle}>{dueDate}</span>
             </p>
-            <p className="todo-description">{description}</p>
+            <p className='todo-unit-table'>
+                <p></p>
+                <p className="todo-description">{description}</p>
+                <p></p>
+            </p>
         </div>
     )
 }

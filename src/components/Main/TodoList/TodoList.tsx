@@ -80,7 +80,7 @@ export const TodoList = () => {
         <p onClick={()=> setShowNewEntry(!showNewEntry)}>{showNewEntry ? "Hide Form" : "Add New Item" }<i className={"fas fa-caret-down optional-icon " + showNewEntryClass}></i></p>
         <div className="optional-block">{showNewEntry && <NewEntry/>}</div>
         
-        <div>
+        <div className="todo-list-block">
 
             {sortedTodos && sortedTodos?.map((todo:any) => {
                 return (

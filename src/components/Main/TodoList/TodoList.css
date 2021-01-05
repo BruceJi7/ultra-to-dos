@@ -26,3 +26,7 @@ padding-bottom:10px;
     background-color: rgb(155, 59, 245);
     color:white;
 }
+
+.todo-list-block {
+    min-width: 40vw;
+}

@@ -1,6 +1,6 @@
 import { Switch, Route } from 'react-router-dom'
 
-import NewEntry from './NewEntry/NewEntry'
+import Connect from './Connect/Connect'
 import {TodoList} from './TodoList/TodoList'
 import { SignIn }  from './SignIn/SignIn'
 
@@ -20,7 +20,7 @@ const Main = () => {
         displayedComponent = (
             <>
                 <Switch>
-                    <Route path="/new" component={NewEntry}/>
+                    <Route path="/connect" component={Connect}/>
                     <Route component={TodoList}/>
                 </Switch>
             </>
