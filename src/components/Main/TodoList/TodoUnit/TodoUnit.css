@@ -6,6 +6,7 @@
 .todo-unit-table {
     display:grid;
     grid-template-columns: 1fr 5fr 3fr;
+    align-items: center;
 }
 
 .todo-title {
@@ -30,4 +31,23 @@
     border-radius: 50%;
     color:rgb(204, 30, 7);
     background-color:white;
+}
+.todo-collab-style {
+    color:chartreuse;
+    
+}
+
+.todo-completed-style {
+    opacity:0.6;
+    text-decoration: line-through;
+    text-decoration-color: black;
+    text-decoration-style: double;
+}
+
+.todo-due-today {
+    color:orange;
+}
+
+.todo-due-elapsed {
+    color:orangered;
 }

@@ -87,6 +87,7 @@ export const TodoList = () => {
                 <TodoUnit 
                     key={todo.id}
                     id={todo.id}
+                    user={todo.uid}
                     title={todo.title} 
                     description={todo.description}
                     dueDate={todo.dueDate.toDate().toDateString()}

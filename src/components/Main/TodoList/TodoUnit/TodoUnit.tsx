@@ -1,4 +1,5 @@
 import './TodoUnit.css'
+import { auth } from "../../../../firebase/fireInstance"
 
 interface Props {
     key: string,
@@ -6,6 +7,7 @@ interface Props {
     // See https://reactjs.org/warnings/special-props.html
     // Also, the id is a string, not a number
     id: string,
+    user:string,
     title:string,
     description:string,
     dueDate:string,
@@ -16,14 +18,38 @@ interface Props {
 } 
 
 export const TodoUnit = (props: Props) => {
-    const {id, title, dueDate, description, completed, deleteMode} = props
+    const {id, title, dueDate, description, completed, deleteMode, user} = props
+    const uid = auth.currentUser?.uid
 
+    // Completion date calculation
+    const todayDate = new Date().toISOString().split('T')[0]
+    const timezoneOffset = new Date(dueDate).getTimezoneOffset()
+    const taskDueDateNoTimezoneCompensation = new Date(dueDate)
+    const taskDueDate = new Date(taskDueDateNoTimezoneCompensation.getTime() - (timezoneOffset*60*1000)).toISOString().split('T')[0]
+
+    // Show either completion checkbox or deletion icon
     let check = <input className="todo-checkbox" type="checkbox" checked={completed} onChange={()=>props.handleChecked(id)} />
 
     if (deleteMode === true) {
         check = <i className="fas fa-minus-circle todo-delete-icon" onClick={()=>props.handleDelete(id, title)}/>
     } 
 
+    // Assign class to title if collab project and/or completed
+    let titleStyle = "todo-title"
+    if (completed) {
+        titleStyle += " todo-completed-style"
+    }
+    if (uid !== user){
+        titleStyle += " todo-collab-style"
+    }
+    
+    // Assign class to date if due today
+    let dateStyle = 'todo-date'
+    if (taskDueDate === todayDate) {
+        dateStyle += ' todo-due-today'
+    } else if (taskDueDate < todayDate) {
+        dateStyle += ' todo-due-elapsed'
+    }
 
     return (
         <div className="todo-unit">
@@ -31,8 +57,8 @@ export const TodoUnit = (props: Props) => {
                 <span>
                     {check}                    
                 </span>
-                <span className="todo-title">{title}</span>
-                <span className="todo-date">{dueDate}</span>
+                <span className={titleStyle}>{title}</span>
+                <span className={dateStyle}>{dueDate}</span>
             </p>
             <p className="todo-description">{description}</p>
         </div>
