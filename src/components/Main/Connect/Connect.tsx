@@ -85,7 +85,7 @@ const Connect = () => {
             setMessage(`You are already connected with yourself`)
         } else {
             console.log('That person is not in the users list')
-            setMessage(`No user with that email address exists`)
+            setMessage(`No Connect user with that email address exists`)
 
         }
     }
@@ -121,7 +121,7 @@ const Connect = () => {
                 <p>
                     To connect with a user, type in their email address.
                 </p>
-                    <input value={userEmailToSearch} onChange={e=>setUserEmailToSearch(e.target.value)} placeholder="Enter user's email"/>
+                    <input type="email" value={userEmailToSearch} onChange={e=>setUserEmailToSearch(e.target.value)} placeholder="Enter user's email"/>
                     <button onClick={() => {handleSubmitConnectAddress()}}>Connect!</button>
             </div>
         )

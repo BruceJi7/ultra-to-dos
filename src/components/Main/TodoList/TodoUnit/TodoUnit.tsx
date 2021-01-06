@@ -51,6 +51,18 @@ export const TodoUnit = (props: Props) => {
         dateStyle += ' todo-due-elapsed'
     }
 
+    // Add description block only if discription exists
+    let descriptionBlock = null
+    if (description !== '') {
+        descriptionBlock = (
+        <div className='todo-unit-table'>
+            <p></p>
+            <p className="todo-description">{description}</p>
+            <p></p>
+        </div>
+        )
+    }
+
     return (
         <div className="todo-unit">
             <p className="todo-unit-table">
@@ -60,11 +72,9 @@ export const TodoUnit = (props: Props) => {
                 <span className={titleStyle}>{title}</span>
                 <span className={dateStyle}>{dueDate}</span>
             </p>
-            <div className='todo-unit-table'>
-                <p></p>
-                <p className="todo-description">{description}</p>
-                <p></p>
-            </div>
+            {descriptionBlock}
+
+
         </div>
     )
 }
