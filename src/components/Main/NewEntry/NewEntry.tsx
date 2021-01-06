@@ -4,6 +4,7 @@ import firebase from 'firebase/app'
 import { firestore, auth } from "../../../firebase/fireInstance"
 
 import './NewEntry.css'
+import { connect } from 'http2'
 
 const NewEntry = () => {
 
@@ -47,7 +48,7 @@ const NewEntry = () => {
 
 
 
-    
+
     const addToDo = async() => {
 
         const dueDate = Math.floor( (new Date(date)).getTime() / 1000)
@@ -73,6 +74,32 @@ const NewEntry = () => {
 
     }
 
+
+    let connectBlock = null
+
+    if (connectUsers && connectUsers.length > 0) {
+
+        console.log("Check connectUsers: ", connectUsers)
+                
+
+        connectBlock = connectUsers.map((u:string)=> {
+            return(
+
+        <p>
+            <span>
+                <input type="checkbox" name="toggleConnectUser" value={u}/>
+            </span>
+            <span>
+                {u}
+            </span>
+        </p>
+            )
+
+        })
+
+        
+    }
+
     return (
         <div className="new-entry-block">
             
@@ -89,6 +116,11 @@ const NewEntry = () => {
             <p className="new-entry-label">
                 <label  htmlFor="date">Due date:</label>
                 <input name="date" type="date" onChange={(e)=> {console.log(e.target.value); setDate(e.target.value)}} value={date}  required/>
+            </p>
+
+            <p>
+                <span>Connect:</span>
+                {connectBlock}
             </p>
 
             <button onClick={()=> addToDo()}>Submit!</button>
