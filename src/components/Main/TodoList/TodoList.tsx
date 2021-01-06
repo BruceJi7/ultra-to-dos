@@ -10,14 +10,6 @@ import { TodoUnit } from './TodoUnit/TodoUnit'
 
 import "./TodoList.css"
 
-// type TodoType = {
-//     key:number,
-//     id:number,
-//     title:string,
-//     description:string,
-//     dueDate:Date,
-// }
-
 export const TodoList = () => {
 
     const [showNewEntry, setShowNewEntry] = useState(false)
@@ -74,6 +66,29 @@ export const TodoList = () => {
         
     }
 
+    const clearCompleted = () => {
+
+        const completedTodos = loadedTodos?.filter((t:any)=> t.completed)
+
+        completedTodos?.forEach((task:any) => {
+            console.log(`Delete task ${task.title}`)
+            todosRef.doc(task.id).delete()
+        })
+
+        // await todosRef.where("completion", "==", true).get()
+        // .then((result)=>{
+        //     result.forEach((doc)=> {
+        //         todosRef.doc(doc.id).delete().then(()=>
+        //             console.log("Cleared a task")
+        //         )
+        //     })
+        // })
+
+
+
+
+    }
+
 
     return (
         <>
@@ -100,7 +115,10 @@ export const TodoList = () => {
                 }
 
         </div>
-        <p className="delete-button" onClick={()=> setDeleteMode(!deleteMode)}>{deleteMode ? "Finished Removing" : "Toggle Remove" }</p>
+        <div className="list-button-block">
+        <span className="delete-button" onClick={()=> setDeleteMode(!deleteMode)}>{deleteMode ? "Finished Removing" : "Toggle Remove" }</span>
+        <span className="delete-button" onClick={clearCompleted}>Remove Completed</span>
+        </div>
         </>
     )
 }
