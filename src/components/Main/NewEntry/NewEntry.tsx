@@ -4,7 +4,6 @@ import firebase from 'firebase/app'
 import { firestore, auth } from "../../../firebase/fireInstance"
 
 import './NewEntry.css'
-import { connect } from 'http2'
 
 const NewEntry = () => {
 
@@ -12,8 +11,10 @@ const NewEntry = () => {
     const [ description, setDescription ] = useState('')
     const [ date, setDate ] = useState(new Date().toISOString().split('T')[0])
     const [ connectUsers, setConnectUsers ] = useState<any>(null)
+    const [ usersToInclude, setUsersToInclude ] = useState<Array<string>>([])
     
     const todosRef = firestore.collection('todos')
+
 
     // useEffect to get connect users if they exist
     useEffect(()=>{
@@ -22,12 +23,14 @@ const NewEntry = () => {
             const cUsers:any = []
             snap.forEach((doc)=> {
                 const data  = doc.data()
-    
+                
                 cUsers.push(data.connectedUsers)
         
             })
 
-            if (cUsers.length > 0) { setConnectUsers(cUsers[0]) }
+            if (cUsers.length > 0) { 
+                setConnectUsers(cUsers[0]) 
+            }
     
             
         })
@@ -35,13 +38,22 @@ const NewEntry = () => {
 
     }, [])
 
-    // useEffect 
-    useEffect(()=>{
+    useEffect(()=> {
+        if(connectUsers) {
+            
+            console.log('Log check connect users was updated: ', connectUsers)
+            console.log('Log include users: ', usersToInclude)
+            
+            }
 
         
-        console.log(connectUsers)
+    }, [connectUsers])
 
-    },[connectUsers])
+    useEffect(()=> {
+
+        console.log('Verify include users was updated: ', usersToInclude)
+
+    }, [usersToInclude])
 
 
     // console.log('Testing new entry connect user list: ', usersRef )
@@ -54,11 +66,22 @@ const NewEntry = () => {
         const dueDate = Math.floor( (new Date(date)).getTime() / 1000)
         const dueTimestamp = new firebase.firestore.Timestamp(dueDate, 0)
 
+        let associatedUsers = [auth.currentUser?.email]
+
+        if (usersToInclude) {
+
+            usersToInclude.forEach((u)=> 
+                    associatedUsers.push(u))
+
+        }
+
+        
+
         await todosRef.add({
             title:title,
             description:description,
             uid:auth.currentUser?.uid,
-            associatedUsers:[auth.currentUser?.uid],
+            associatedUsers:associatedUsers,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             dueDate: dueTimestamp,
             completed:false
@@ -66,12 +89,37 @@ const NewEntry = () => {
 
         setTitle('')
         setDescription('')
-        // setDate('')
 
+    }
 
+    const handleInclude = (e:React.ChangeEvent<HTMLInputElement>) => {
+
+        const {value, checked} = e.target
+        let includeArray = usersToInclude
+
+        if (checked === true) {
+
+            if (!includeArray.includes(value)) {
+
+                includeArray.push(value)
+
+            } // else, do nothing
+
+        } else {
+
+            if (includeArray.includes(value)) {
+                console.log('INCLUDES')
+                const arr = includeArray.filter((v)=> {
+                    return v !== value
+                })
+                console.log("Log filter worked: ",arr)
+                includeArray = arr
+            } // else, do nothing
+
+        }
         
-
-
+        setUsersToInclude(includeArray)
+     
     }
 
 
@@ -79,15 +127,13 @@ const NewEntry = () => {
 
     if (connectUsers && connectUsers.length > 0) {
 
-        console.log("Check connectUsers: ", connectUsers)
-                
-
         connectBlock = connectUsers.map((u:string)=> {
+
             return(
 
         <p>
             <span>
-                <input type="checkbox" name="toggleConnectUser" value={u}/>
+                <input type="checkbox" name="toggleConnectUser" value={u} onChange={(e) => handleInclude(e)}/>
             </span>
             <span>
                 {u}
@@ -119,7 +165,7 @@ const NewEntry = () => {
             </p>
 
             <p>
-                <span>Connect:</span>
+                {connectBlock && <span>Connect:</span>}
                 {connectBlock}
             </p>
 

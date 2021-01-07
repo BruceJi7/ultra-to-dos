@@ -8,6 +8,7 @@ interface Props {
     // Also, the id is a string, not a number
     id: string,
     user:string,
+    associatedUsers:string[],
     title:string,
     description:string,
     dueDate:string,
@@ -18,7 +19,7 @@ interface Props {
 } 
 
 export const TodoUnit = (props: Props) => {
-    const {id, title, dueDate, description, completed, deleteMode, user} = props
+    const {id, title, dueDate, description, completed, deleteMode, user, associatedUsers} = props
     const uid = auth.currentUser?.uid
 
     // Completion date calculation
@@ -56,23 +57,41 @@ export const TodoUnit = (props: Props) => {
     if (description !== '') {
         descriptionBlock = (
         <div className='todo-unit-table'>
-            <p></p>
-            <p className="todo-description">{description}</p>
-            <p></p>
+            <span></span>
+            <span className="todo-description">{description}</span>
+            <span></span>
         </div>
         )
     }
 
+    // Add associated users if it exists
+    let associatedUsersBlock = null
+    if (associatedUsers.length > 1) {
+
+        const assocString = associatedUsers.slice(1).join(', ')
+
+        associatedUsersBlock = (
+            <div className='todo-unit-table'>
+                <span className="todo-associated">With:</span>
+                <span className="todo-associated">{assocString}</span>
+                <span></span>
+            </div>
+
+        )
+    }
+
+
     return (
         <div className="todo-unit">
-            <p className="todo-unit-table">
+            <div className="todo-unit-table">
                 <span>
                     {check}                    
                 </span>
                 <span className={titleStyle}>{title}</span>
                 <span className={dateStyle}>{dueDate}</span>
-            </p>
+            </div>
             {descriptionBlock}
+            {associatedUsersBlock}
 
 
         </div>

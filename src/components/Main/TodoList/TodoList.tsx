@@ -17,13 +17,14 @@ export const TodoList = () => {
 
     // Because auth.currentUser is User | null (that is, either a User or null), you can't guarantee that uid exists.
     // By using optional chaining, we can access it: https://stackoverflow.com/a/28469563/795407
-    const uid = auth.currentUser?.uid
+    // const uid = auth.currentUser?.uid
+    const userEmail = auth.currentUser?.email
 
     const showNewEntryClass = showNewEntry ? null : "optional-open"
 
 
     const todosRef = firestore.collection('todos')
-    const query = todosRef.where('associatedUsers', 'array-contains', uid) // I want to have orderBy here too but it doesn't work :S
+    const query = todosRef.where('associatedUsers', 'array-contains', userEmail) // I want to have orderBy here too but it doesn't work :S
 
     // const query = todosRef.orderBy('dueDate')
 
@@ -103,6 +104,7 @@ export const TodoList = () => {
                     key={todo.id}
                     id={todo.id}
                     user={todo.uid}
+                    associatedUsers={todo.associatedUsers}
                     title={todo.title} 
                     description={todo.description}
                     dueDate={todo.dueDate.toDate().toDateString()}

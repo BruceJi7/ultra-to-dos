@@ -45,7 +45,7 @@ const Connect = () => {
             uid:currentUser?.uid,
             email:currentUser?.email
         })
-        .then(()=> console.log('Success!'))
+        .then(()=> {console.log('Success!'); setConnectActive(true)})
         .catch(e => console.error("Error connecting to connect: ", e))
 
     }
@@ -59,7 +59,7 @@ const Connect = () => {
             return u.email === userEmailToSearch
         })[0]
         // If exists, get their id and add it
-        if (userToConnectTo) {
+        if (userToConnectTo && userToConnectTo.email !== currentUser?.email) {
 
             // && userToConnectTo.uid !== currentUser?.uid 
             // const userConnectedUsers = currentUserFireBaseDoc.data().connectedUsers
@@ -73,14 +73,14 @@ const Connect = () => {
             
 
             await currentUserDocRef.update({
-                connectedUsers: firebase.firestore.FieldValue.arrayUnion(userToConnectTo.uid)
+                connectedUsers: firebase.firestore.FieldValue.arrayUnion(userToConnectTo.email)
             }).then(()=> {
 
                 console.log('Successfully connected')
                 setMessage(`Successfully connected with user at: ${userEmailToSearch}`)
         
             })
-        } else if (userToConnectTo && userToConnectTo.uid !== currentUser?.uid) {
+        } else if (userToConnectTo && userToConnectTo.email === currentUser?.email) {
             console.log('User attempts to connect with themselves')
             setMessage(`You are already connected with yourself`)
         } else {
